@@ -1,5 +1,6 @@
 import type { Gift } from '../data/giftData';
 import { Heart } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 interface GiftCardProps {
     readonly gift: Gift;
@@ -10,35 +11,43 @@ interface GiftCardProps {
 
 export function GiftCard({ gift, isFavorite, onToggleFavorite, style }: GiftCardProps) {
     return (
-        <div className="group" style={style}>
-            <div className="relative h-60 w-full rounded-xl bg-slate-200 overflow-hidden mb-3">
+        <div
+            className="flex flex-col gap-3 group cursor-pointer"
+            style={style}
+        >
+            {/* Image Container */}
+            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] bg-slate-50">
                 <img
                     src={gift.image}
                     alt={gift.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
+
+                {/* Floating Heart Button */}
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
                         onToggleFavorite(gift.id);
                     }}
-                    className="absolute top-2 right-2 bg-white/90 backdrop-blur rounded-full p-1.5 shadow-sm
-            hover:scale-110 active:scale-95 transition-transform cursor-pointer"
+                    className="absolute top-4 right-4 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all cursor-pointer z-10"
                 >
                     <Heart
-                        size={16}
-                        className={`transition-colors ${isFavorite ? 'fill-rose-500 text-rose-500' : 'text-slate-400'
+                        size={18}
+                        className={`transition-colors ${isFavorite ? 'fill-rose-500 text-rose-500' : 'text-slate-300'
                             }`}
                     />
                 </button>
-                {/* Price badge */}
-                <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur rounded-full px-3 py-1 shadow-sm">
-                    <span className="text-sm font-bold text-primary">{gift.price.toFixed(2)} €</span>
-                </div>
             </div>
-            <h4 className="font-bold text-slate-800 truncate text-sm">{gift.name}</h4>
-            <p className="text-slate-500 text-xs mt-0.5 line-clamp-2">{gift.description}</p>
+
+            {/* Info */}
+            <div className="px-1 space-y-1">
+                <h4 className="font-extrabold text-[15px] text-slate-900 leading-tight group-hover:text-primary transition-colors line-clamp-1">
+                    {gift.name}
+                </h4>
+                <p className="text-primary font-black text-sm">
+                    {gift.price.toFixed(2)} €
+                </p>
+            </div>
         </div>
     );
 }
